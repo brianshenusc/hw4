@@ -250,6 +250,7 @@ protected:
 		void clear_helper(Node<Key, Value> *curr);
 		int balanced_helper(Node<Key, Value> *curr, int val) const;
 		bool balanced_helper2(Node<Key, Value> *curr) const;
+		Node<Key, Value>* successor(Node<Key, Value>* current);
 
 
 protected:
@@ -639,18 +640,40 @@ BinarySearchTree<Key, Value>::predecessor(Node<Key, Value>* current)
 					parent = parent->getParent();
 				}
 			}
-			// while(parent != NULL) {
-			// 	// if the parent node is the first instance of being a right child
-			// 	Node<Key, Value>* parent_parent = parent->getParent();
-			// 	if(parent_parent->getRight() == parent) {
-			// 		return parent_parent;
-			// 	}
-			// 	else {
-			// 		parent = parent_parent;
-			// 	}
-			// }
 		}
 		// there is no predecessor
+		return NULL;
+}
+
+template<class Key, class Value>
+Node<Key, Value>* BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current) {
+    // TODO
+		if(current->getRight() != NULL) {
+			current = current->getRight();
+			bool isDone = false;
+			while(!isDone) {
+				if(current->getLeft() != NULL) {
+					current = current->getLeft(); 
+				}
+				else {
+					isDone = true;
+					return current;
+				}
+			}
+		}
+		else {
+			Node<Key, Value>* parent = current->getParent();
+			while(parent != NULL) {
+				// checks if the parent is a left child
+				if(parent->getParent()->getLeft() == parent) {
+					return parent->getParent();
+				}
+				else {
+					parent = parent->getParent();
+				}
+			}
+		}
+		// there is no successor
 		return NULL;
 }
 
